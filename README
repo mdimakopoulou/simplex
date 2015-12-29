@@ -1,0 +1,48 @@
+- compile w/ make
+
+
+Problem input format (CSV):
+
+ - constraints come first, then the objectives.
+ - constraints come in this order: less than or equal, greater than or equal, then equalities.
+ - the objective line MUST end with a zero (so as to make a rectangular matrix)
+
+
+Examples:
+
+./simplex -h
+    prints a help message
+
+./simplex -G
+    prints the OpenCL platforms and devices
+
+./simplex -o /dev/null -P data/test_p.csv -W
+    solve the (maximization) problem defined in data/test_P.csv
+
+./simplex -o /dev/null -P data/test_p.csv -W -v
+    enable verbose output (pivot selection and steps)
+
+./simplex -o /dev/null -P data/test_p.csv -W -vv
+    enable more verbose output: shows the tableaus
+
+./simplex -o /dev/null -P data/test_p3.csv -vvv -U 0,0,2 -q
+    run a minimization problem with 2 equalities.
+
+
+To enable the GPU, inspect first your platforms & devices:
+
+./simplex -G
+
+Total: 2 platforms
+  Platform[0] (1 devices) [V: OpenCL 1.2 LINUX] ::Intel(R) OpenCL
+    Device[0] ::         Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz  | W/G max = 1024
+  Platform[1] (2 devices) [V: OpenCL 2.0 AMD-APP (1800.11)]   ::AMD Accelerated Parallel Processing
+    Device[0] :: Cypress    | W/G max = 256
+    Device[1] :: Intel(R) Core(TM) i7-3770 CPU @ 3.40GHz    | W/G max = 1024
+
+To select the GPU in the above (the Cypress device), use:
+
+./simplex -o /dev/null -P data/test_p3.csv -vvv -U 0,0,2 -q -p1 -d0 -c
+
+NOTE: -c should always be used w/ GPU runs (it selects the only working implementation)
+
